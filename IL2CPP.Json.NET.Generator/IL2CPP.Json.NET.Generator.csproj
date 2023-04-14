@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$(MSBuildThisFileDirectory)\GameFolder.props" Condition="Exists('$(MSBuildThisFileDirectory)\GameFolder.props')" />
+
+	<Target Name="ValidateGamePath">
+		<Error Text="The GameFolder property must be set to the GTFO game folder." Condition="'$(GameFolder)' == '' or !Exists('$(GameFolder)')" />
+	</Target>
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<BIELibsFolder>$(GameFolder)\BepInEx\core</BIELibsFolder>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="$(BIELibsFolder)\BepInEx.Core.dll" Private="false" />
+		<Reference Include="$(BIELibsFolder)\BepInEx.Preloader.Core.dll" Private="false" />
+		<Reference Include="$(BIELibsFolder)\Mono.Cecil.dll" Private="false" />
+	</ItemGroup>
+</Project>
