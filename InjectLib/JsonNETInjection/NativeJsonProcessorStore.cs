@@ -49,9 +49,24 @@ internal static class NativeJsonProcessorStore
         }
     }
 
-    public static bool TryGetConverter(IntPtr typePtr, out IntPtr converterPtr)
+    public static bool TryGetConverterPointer(IntPtr typePtr, out IntPtr converterPtr)
     {
-        if (_RegisteredProcessors.TryGetValue(typePtr, out var processor))
+        if (TryGetProcessor(typePtr, out var processor))
+        {
+            if (processor.DummyConverter != null)
+            {
+                converterPtr = processor.DummyConverter.Pointer;
+                return converterPtr != IntPtr.Zero;
+            }
+        }
+
+        converterPtr = IntPtr.Zero;
+        return false;
+    }
+
+    public static bool TryGetProcessor(IntPtr typePtr, out NativeJsonProcessor processor)
+    {
+        if (_RegisteredProcessors.TryGetValue(typePtr, out processor))
         {
             if (processor == null)
             {
@@ -63,22 +78,10 @@ internal static class NativeJsonProcessorStore
                 goto RETURN_NULL;
             }
 
-            converterPtr = processor.DummyConverter.Pointer;
-            return converterPtr != IntPtr.Zero;
-        }
-
-    RETURN_NULL:
-        converterPtr = IntPtr.Zero;
-        return false;
-    }
-
-    public static bool TryGetForType(IntPtr typePtr, out NativeJsonProcessor processor)
-    {
-        if (_RegisteredProcessors.TryGetValue(typePtr, out processor))
-        {
             return processor != null;
         }
 
+    RETURN_NULL:
         processor = null;
         return false;
     }

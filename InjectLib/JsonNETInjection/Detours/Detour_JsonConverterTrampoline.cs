@@ -34,7 +34,7 @@ internal class Detour_JsonConverterTrampoline
 
     private unsafe static IntPtr Detour(IntPtr converters, IntPtr objectType, Il2CppMethodInfo* methodInfo)
     {
-        if (NativeJsonProcessorStore.TryGetConverter(objectType, out var converter))
+        if (NativeJsonProcessorStore.TryGetConverterPointer(objectType, out var converter))
         {
             return converter;
         }
