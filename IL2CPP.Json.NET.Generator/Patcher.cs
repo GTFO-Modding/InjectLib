@@ -24,7 +24,10 @@ public class Patcher : BasePatcher
                 type.Namespace = type.Namespace.Replace("Newtonsoft.Json", "Il2CppJsonNet");
             }
 
-            var newAsmPath = Path.Combine(Paths.BepInExRootPath, "cache", "Il2CppJsonNet.dll");
+            var newAsmDir = Path.Combine(Paths.BepInExRootPath, "cache");
+            Directory.CreateDirectory(newAsmDir);
+
+            var newAsmPath = Path.Combine(newAsmDir, "Il2CppJsonNet.dll");
             newAsm.Write(newAsmPath);
 
             Assembly.LoadFrom(newAsmPath);
